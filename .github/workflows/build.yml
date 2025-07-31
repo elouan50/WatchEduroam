@@ -1,0 +1,40 @@
+name: Build Garmin Watch Face
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download Garmin SDK zip
+      run: |
+        curl -L https://elouan50.github.io/resources/custom-fr55-sdk.zip -o sdk.zip
+        unzip sdk.zip -d sdk
+
+    - name: Restore private key from secret
+      run: |
+        echo "${{ secrets.GARMIN_PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+
+    - name: Build PRG file
+      run: |
+        ./sdk/bin/monkeyc \
+          --sdk-path sdk/ \
+          -d fr55 \
+          -f monkey.jungle \
+          -o build/WatchEduroam.prg \
+          -y private_key.pem
+
+    - name: Upload built PRG as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: WatchEduroam.prg
+        path: build/WatchEduroam.prg
