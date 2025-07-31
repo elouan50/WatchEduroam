@@ -27,7 +27,6 @@ jobs:
     - name: Build PRG file
       run: |
         ./sdk/bin/monkeyc \
-          --sdk-path sdk/ \
           -d fr55 \
           -f monkey.jungle \
           -o build/WatchEduroam.prg \
