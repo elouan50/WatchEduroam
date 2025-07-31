@@ -21,8 +21,8 @@ jobs:
 
     - name: Restore private key from secret
       run: |
-        echo "${{ secrets.GARMIN_PRIVATE_KEY }}" > private_key.pem
-        chmod 600 private_key.pem
+        echo "${{ secrets.GARMIN_PRIVATE_KEY_B64 }}" | base64 -d > developer_key
+        chmod 600 developer_key
 
     - name: Build PRG file
       run: |
@@ -31,7 +31,7 @@ jobs:
           -d fr55 \
           -f monkey.jungle \
           -o build/WatchEduroam.prg \
-          -y private_key.pem
+          -y developer_key
 
     - name: Upload built PRG as artifact
       uses: actions/upload-artifact@v4
