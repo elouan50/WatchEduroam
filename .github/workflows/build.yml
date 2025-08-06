@@ -27,7 +27,7 @@ jobs:
     - name: Build PRG file
       run: |
         ./sdk/bin/monkeyc \
-          -d fr55 \
+          -d sdk/devices/fr55/fr55.bin \
           -f monkey.jungle \
           -o build/WatchEduroam.prg \
           -y developer_key
